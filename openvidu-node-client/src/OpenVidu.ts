@@ -15,6 +15,7 @@
  *
  */
 
+const debug = require('debug')('openvidu:openvidu');
 import axios from 'axios';
 import { Connection } from './Connection';
 import { Publisher } from './Publisher';
@@ -471,22 +472,22 @@ export class OpenVidu {
             console.log('Active sessions info fetched: ', fetchedSessionIds);
             resolve(hasChanged);
           } else {
-            // ERROR response from openvidu-server. Resolve HTTP status
+            debug("ERROR response from openvidu-server. Resolve HTTP status");
             reject(new Error(res.status.toString()));
           }
         }).catch(error => {
           if (error.response) {
-            // The request was made and the server responded with a status code (not 2xx)
+            debug("The request was made and the server responded with a status code (not 2xx)");
             reject(new Error(error.response.status.toString()));
           } else if (error.request) {
-            // The request was made but no response was received
+            debug("The request was made but no response was received");
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
             // http.ClientRequest in node.js
-            console.error(error.request);
+            debug(error.request);
             reject(new Error(error.request));
           } else {
-            // Something happened in setting up the request that triggered an Error
-            console.error('Error', error.message);
+            debug("Something happened in setting up the request that triggered an Error");
+            debug('Error', error.message);
             reject(new Error(error.message));
           }
         });
